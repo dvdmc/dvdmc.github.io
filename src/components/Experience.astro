@@ -1,0 +1,10 @@
+---
+const { title, company, location, startDate, endDate, description } = Astro.props;
+---
+<div class="animate-fade-in-left max-w-3xs sm:max-w-md">
+  <h3 class="font-bold text-base sm:text-lg">{startDate} - {endDate}</h3>
+  <h4 class="font-semibold text-sm sm:text-lg break-words">{title}</h4>
+  <p class="break-words">{company}</p>
+  <p class="text-sm sm:text-base">{location}</p>
+  <p class="text-sm sm:text-base">{description}</p>
+</div>

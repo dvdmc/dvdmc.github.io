@@ -1,0 +1,18 @@
+---
+import Header from '@/components/Header.astro';
+import '@/styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>David Morilla-Cabello</title>
+		<link rel="stylesheet" href="https://unpkg.com/lenis@1.3.3/dist/lenis.css">
+	</head>
+	<body class="w-screen overflow-x-hidden">
+		<Header />
+		<slot />
+	</body>
+</html>

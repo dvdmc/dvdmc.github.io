@@ -1,0 +1,155 @@
+---
+
+---
+
+<!-- Header -->
+<header
+    class="sticky top-0 z-50 bg-neutral-100 shadow-sm flex items-center justify-between px-6 py-4"
+>
+    <!-- Logo -->
+    <a href="/" class="flex size-8 items-center space-x-2">
+        <img src="../src/assets/personal_logo.png" alt="Logo" />
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex space-x-6 text-sm text-gray-600">
+        <a href="/" class="hover:text-primary-800 transition-colors">Home</a>
+        <a href="/#about" class="hover:text-primary-800 transition-colors"
+            >About</a
+        >
+        <a href="/#interests" class="hover:text-primary-800 transition-colors"
+            >Research Interests</a
+        >
+        <a
+            href="/#publications"
+            class="hover:text-primary-800 transition-colors">Publications</a
+        >
+        <a href="/#experience" class="hover:text-primary-800 transition-colors"
+            >Experience</a
+        >
+        <!-- <a href="/photos" class="hover:text-primary-800 transition-colors font-semibold">Photos</a> -->
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button
+        id="burger"
+        class="md:hidden !bg-transparent flex flex-col items-end space-y-1 focus:outline-none"
+    >
+        <span id="top-menu-bar" class="block rounded-full w-6 h-0.5 bg-black"
+        ></span>
+        <span id="middle-menu-bar" class="block rounded-full w-4 h-0.5 bg-black"
+        ></span>
+        <span id="bottom-menu-bar" class="block rounded-full w-6 h-0.5 bg-black"
+        ></span>
+    </button>
+</header>
+
+<!-- Side Drawer (Mobile Nav) -->
+<div
+    id="side-drawer"
+    class="fixed top-15 right-0 w-64 h-full bg-neutral-100 shadow-lg transform translate-x-full z-40 flex flex-col p-6 space-y-4 text-gray-700 text-lg md:hidden">
+    <a href="/" class="hover:text-primary-800 transition-colors">Home</a>
+    <a href="/#about" class="hover:text-primary-800 transition-colors"
+        >About Me</a
+    >
+    <a href="/#interests" class="hover:text-theme-text-dark transition-colors"
+        >Interests</a
+    >
+    <a href="/#publications" class="hover:text-theme-text-dark transition-colors"
+        >Publications</a
+    >
+    <a href="/#experience" class="hover:text-theme-text-dark transition-colors"
+        >Experience</a
+    >
+</div>
+
+<script>
+    import gsap from 'gsap';
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const drawer = document.getElementById("side-drawer")!;
+        const openBtn = document.getElementById("burger")!;
+
+        const topBar = document.getElementById("top-menu-bar");
+        const middleBar = document.getElementById("middle-menu-bar");
+        const bottomBar = document.getElementById("bottom-menu-bar");
+        let isOpen = false;
+
+        function openDrawer() {
+            isOpen = true;
+            gsap.to(drawer, {
+                x: 0,
+                duration: 0.4,
+                ease: "power2.out",
+            });
+            gsap.to(middleBar, {
+                scaleX: 0,
+                rotate: 180,
+                duration: 0.4,
+                ease: "none",
+            });
+            gsap.to(topBar, {
+                y: 6,
+                rotate: -135,
+                duration: 0.4,
+                ease: "power2.out",
+            });
+            gsap.to(bottomBar, {
+                y: -6,
+                rotate: 135,
+                duration: 0.4,
+                ease: "power2.out",
+            });
+        }
+
+        function closeDrawer() {
+            isOpen = false;
+            gsap.to(drawer, {
+                x: drawer.offsetWidth,
+                duration: 0.4,
+                ease: "power2.out",
+            });
+            gsap.to(middleBar, {
+                scaleX: 1,
+                rotate: 0,
+                duration: 0.4,
+                ease: "none",
+            });
+            gsap.to(topBar, {
+                y: 0,
+                rotate: 0,
+                duration: 0.4,
+                ease: "power2.out",
+            });
+            gsap.to(bottomBar, {
+                y: 0,
+                rotate: 0,
+                duration: 0.4,
+                ease: "power2.out",
+            });
+        }
+
+        openBtn.addEventListener("click", () => {
+            if (!isOpen) openDrawer();
+            else closeDrawer();
+        });
+
+        // Close drawer when clicking on a link inside the drawer
+        drawer.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                if (isOpen) closeDrawer();
+            });
+        });
+
+        // Close drawer when clicking outside the drawer or button
+        document.addEventListener("click", (e) => {
+            if (
+                isOpen &&
+                !drawer.contains(e.target as Node) &&
+                !openBtn.contains(e.target as Node)
+            ) {
+                closeDrawer();
+            }
+        });
+    });
+</script>

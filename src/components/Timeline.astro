@@ -1,0 +1,193 @@
+---
+import { getCollection } from "astro:content";
+import Experience from "@/components/Experience.astro";
+
+const experiences = (await getCollection("experience")).sort((a, b) =>
+  a.id.localeCompare(b.id),
+);
+---
+
+<section
+  id="experience"
+  class="scroll-mt-16 pt-8  pb-[400px] sm:pb-[300px] px-6 max-w-3xl mx-auto overflow-clip"
+>
+  <h2 class="text-2xl font-bold mb-8">Experience Timeline</h2>
+
+  <div class="relative h-[1500px]">
+    <!-- Taller container for scroll room -->
+
+    <!-- Curved SVG Path -->
+    <svg
+      id="timeline-path"
+      class="absolute left-1/6 sm:left-1/4 -translate-x-1/2 h-[120%] sm:h-[110%] w-auto pointer-events-none text-theme-blue-dark"
+      viewBox="0 -10 200 1500"
+      fill="none"
+    >
+      <defs>
+        <marker
+          id="start-circle"
+          markerWidth="6"
+          markerHeight="6"
+          refX="3"
+          refY="3"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <circle cx="3" cy="3" r="2" fill="currentColor"></circle>
+        </marker>
+      </defs>
+      <path
+        id="curve"
+        d="M100,0 C 200, 400 -50, 800 100,1200"
+        stroke="currentColor"
+        stroke-width="5"
+        fill="none"
+        stroke-linecap="round"
+        marker-start="url(#start-circle)"
+        marker-end="url(#start-circle)"
+      >
+      </path>
+    </svg>
+    {
+      (
+        <div
+          id="markers-container"
+          class="absolute left-1/4 top-0 w-12 h-full pointer-events-none"
+        >
+          {experiences.map((exp, i) => (
+            <div
+              key={i}
+              class="marker absolute w-4 h-4"
+              data-index={i}
+              style={{ transformOrigin: "50% 50%" }}
+            >
+              <div class="marker-circle w-4 h-4 rounded-full bg-theme-blue-dark shadow-md" />
+            </div>
+          ))}
+        </div>
+      )
+    }
+    <!-- Experience nodes -->
+    {
+      experiences.map((exp, i) => (
+        <div class="experience-node absolute" data-index={i}>
+          <Experience {...exp.data} />
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+
+  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const path = document.querySelector("#curve");
+    const initial_marker = document.querySelector("#start-circle");
+    const nodes = gsap.utils.toArray(".experience-node");
+    const markers = gsap.utils.toArray(".marker");
+
+    // Animate SVG path stroke reveal
+    const pathLength = path.getTotalLength();
+    path.style.strokeDasharray = pathLength;
+    path.style.strokeDashoffset = pathLength;
+    const ANIMATION_OFFSET = 100;
+    
+    gsap.to(path, {
+      strokeDashoffset: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#experience",
+        start: "top center-=" + ANIMATION_OFFSET,
+        end: "bottom bottom-=" + ANIMATION_OFFSET,
+        scrub: 1,
+        // markers: true
+      },
+    });
+    
+    // gsap.fromTo(initial_marker, {
+    //   autoAlpha: 0,
+    // }, {
+    //   autoAlpha: 1,
+    //   ease: "none",
+    //   scrollTrigger: {
+    //     trigger: initial_marker,
+    //     start: "top center+=10",
+    //     end: "bottom center",
+    //     scrub: 1,
+    //     markers: true
+    //   },
+    // })
+
+    // Move each node along the path
+    nodes.forEach((node, i) => {
+      gsap.fromTo(
+        node,
+        {
+          motionPath: {
+            path: path,
+            align: path,
+            alignOrigin: [-0.1, 1.0],
+            start: 0.1 + i / nodes.length,
+            end: (i + 1) / nodes.length,
+          },
+          autoAlpha: 0,
+        },
+        {
+          ease: "none",
+          motionPath: {
+            path: path,
+            align: path,
+            alignOrigin: [-0.1, 0.5],
+            start: 0.1 + i / nodes.length,
+            end: (i + 1) / nodes.length,
+          },
+          autoAlpha: 1,
+          scrollTrigger: {
+            trigger: node,
+            start: "top center-=" + ANIMATION_OFFSET / 1.8,
+            end: "bottom center-=" + ANIMATION_OFFSET / 0.8,
+            scrub: 0.3,
+          },
+        },
+      );
+    });
+
+    markers.forEach((marker, i) => {
+      gsap.fromTo(
+        marker,
+        {
+          motionPath: {
+            path: path,
+            align: path,
+            alignOrigin: [0.5, 0.5], // center the marker on the path
+            start: 0.1 + i / markers.length,
+            end: 0.1 + i / markers.length,
+          },
+          scale: 0, // start scaled down (hidden)
+        },
+        {
+          motionPath: {
+            path: path,
+            align: path,
+            alignOrigin: [0.5, 0.5],
+            start: 0.1 + i / markers.length,
+            end: (i + 1) / markers.length,
+          },
+          scale: 1, // scale up to full size (visible)
+          ease: "none",
+          scrollTrigger: {
+            trigger: marker,
+            start: `top center+=60`,
+            end: `bottom center+=30`,
+            scrub: 0.3,
+          },
+        },
+      );
+    });
+  });
+</script>

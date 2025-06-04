@@ -1,0 +1,32 @@
+---
+const { id, open } = Astro.props;
+---
+
+<button
+    type="button"
+    class="theme-btn"
+    onClick={`document.getElementById('${id}').showModal()`}
+>
+    {open}
+</button>
+
+<dialog
+    id={id}
+    class="fixed p-3 top-1/3 left-[12%] sm:left-[15%] rounded-lg shadow-lg max-w-3/4 bg-white backdrop-blur-lg animate-scale animate-ease-in"
+>
+    <form method="dialog" class="flex justify-end mb-4">
+        <h2 class="text-lg m-0 mr-3 font-semibold w-full">{open}</h2>
+        <button
+            type="submit"
+            class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none"
+            aria-label="Close modal"
+        >
+            ✕
+        </button>
+    </form>
+    <div
+        class="whitespace-pre overflow-auto select-text text-sm font-mono"
+    >
+        <slot name="main" />
+    </div>
+</dialog>

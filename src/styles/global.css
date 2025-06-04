@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@plugin "@midudev/tailwind-animations";
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --color-theme-blue: #547792;
+    --color-theme-blue-bg: #DAE9F5;
+    --color-theme-blue-dark: #213448;
+    --color-theme-blue-light: #94B4C1;
+    --color-theme-light: #EDDDB9;
+    --color-theme-bg: #FAFAF5;
+
+    --color-theme-secondary: #9779DF;
+    --color-theme-secondary-dark: #5B4986;
+    --color-theme-secondary-light: #b185d0;
+
+    --color-theme-text-dark: #202329;
+    --color-theme-text-gray: #778499;
+    --color-theme-text-light: #E8F0FF;
+
+    --font-playfair: "PlayfairDisplay", system-ui, sans-serif;
+    --font-roboto: "Roboto", system-ui, sans-serif;
+}
+
+@layer base {
+
+	html {
+        @apply m-0 scroll-smooth bg-theme-bg;
+	}
+
+	body {
+        @apply font-roboto text-theme-text-dark;
+	}
+
+	a,
+	button {
+        @apply cursor-pointer border-none outline-none select-none bg-none shadow-none;
+	}
+
+	img,
+	video {
+        @apply block max-w-full object-cover;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+        @apply font-bold font-playfair;
+	}
+
+    h2 {
+        @apply bg-theme-light rounded-sm px-4 py-2 text-3xl font-semibold mb-4;
+    }
+
+}
+
+@layer components {
+    .theme-btn {
+        @apply text-white bg-theme-blue-dark px-2 font-semibold rounded-md hover:scale-110 transition-transform decoration-0;
+    }
+}
+
+@font-face {
+    font-family: "PlayfairDisplay";
+    src: url(../assets/fonts/PlayfairDisplay.woff2) format("woff2");
+    font-style: normal;
+    font-weight: 100 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url(../assets/fonts/Roboto.woff2) format("woff2");
+    font-style: normal;
+    font-weight: 100 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url(../assets/fonts/RobotoItalic.woff2) format("woff2");
+    font-style: italic;
+    font-weight: 100 700;
+    font-display: swap;
+}

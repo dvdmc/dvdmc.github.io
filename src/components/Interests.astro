@@ -1,0 +1,161 @@
+---
+
+---
+
+<section id="interests" class="scroll-mt-16 py-8 px-6 max-w-3xl mx-auto">
+  <div id="video-container">
+    <h2 class="mb-4 text-2xl font-semibold">Research Interests</h2>
+
+    <div id="video-and-cards-area" class="flex items-stretch gap-4">
+      <!-- Stacked Cards -->
+      <div class="w-1/2 flex flex-col justify-around items-center p-2 sm:p-4">
+        <div
+          class="card bg-white/90 backdrop-blur-md shadow-md rounded-lg px-2 py-1 sm:px-6 sm:py-4 text-center font-semibold w-full opacity-0 translate-y-10"
+        >
+          Semantic scene understanding
+        </div>
+        <div
+          class="card bg-white/90 backdrop-blur-md shadow-md rounded-lg px-2 py-1 sm:px-6 sm:py-4 text-center font-semibold w-full opacity-0 translate-y-10"
+        >
+          Active Perception
+        </div>
+        <div
+          class="card bg-white/90 backdrop-blur-md shadow-md rounded-lg px-2 py-1 sm:px-6 sm:py-4 text-center font-semibold w-full opacity-0 translate-y-10"
+        >
+          Multi-robot teams
+        </div>
+      </div>
+
+      <div class="w-1/2 flex justify-center items-start">
+        <video
+          id="scroll-video"
+          src="../src/assets/output.mp4"
+          class="w-full h-auto rounded-lg [clip-path:ellipse(90%_90%_at_90%_50%)]"
+          muted
+          playsinline
+          preload="auto"></video>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  import { gsap } from "gsap";
+  import ScrollTrigger from "gsap/ScrollTrigger";
+  import Lenis from "lenis";
+
+  // ffmpeg tips:
+  // ffmpeg -i video.mp4 -movflags faststart -vcodec libx264 -crf 23 -g 1 -pix_fmt yuv420p output.mp4
+  // ffmpeg -i video.mp4 -vf scale=960:-1 -movflags faststart -vcodec libx264 -crf 20 -g 1 -pix_fmt yuv420p output_960.mp4
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 1) Smooth scroll with Lenis
+  const lenis = new Lenis({ lerp: 0.05, smoothWheel: true });
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.lagSmoothing(0);
+
+  // 2) iOS video activation (unlocks autoplay behavior on touch)
+  function once(el, event, fn, opts) {
+    const handler = (e) => {
+      el.removeEventListener(event, handler);
+      fn(e);
+    };
+    el.addEventListener(event, handler, opts);
+  }
+
+  const video = document.getElementById("scroll-video");
+  once(document.documentElement, "touchstart", () => {
+    if (video.paused) {
+      video.play()
+        .then(() => video.pause())
+        .catch((e) => console.error("iOS unlock failed:", e));
+    }
+  }, { passive: true });
+
+  // 3) Main setup when DOM is ready
+  window.addEventListener("DOMContentLoaded", () => {
+    const video_container = document.getElementById("video-container");
+    const cards = gsap.utils.toArray(".card");
+    const STICKY_HEADER_HEIGHT = 75;
+
+    gsap.set(cards, { opacity: 0, y: 0 });
+
+    const videoTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: video_container,
+        start: `top top+=${STICKY_HEADER_HEIGHT}px`,
+        end: () => `+=${video_container.offsetHeight * 4.0}`,
+        scrub: 0.5,
+        pin: true,
+        anticipatePin: 1,
+        // markers: true, // Keep for debugging
+        onUpdate: (self) => {
+          if (video.duration) {
+            video.currentTime = video.duration * self.progress;
+            // console.log(`ScrollTrigger Progress: ${self.progress.toFixed(3)}, Video Time: ${video.currentTime.toFixed(3)} / ${video.duration.toFixed(3)}`);
+          }
+        },
+        onToggle: (self) => {
+          console.log("Pin active:", self.isActive);
+        },
+      },
+    });
+    
+    videoTimeline.fromTo(video, {scale: 0, opacity: 0 }, {scale:1, opacity: 1, duration: 0.15, ease: "power2.out" }, "00%");
+    videoTimeline.fromTo(video, { x: 500}, { x:0, duration: 0.3, ease: "power2.out" }, "00%");
+
+    if (cards.length > 0) {
+      videoTimeline.fromTo(cards[0], { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, "20%");
+    }
+    if (cards.length > 1) {
+      videoTimeline.fromTo(cards[1], { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, "45%");
+    }
+    if (cards.length > 2) {
+      videoTimeline.fromTo(cards[2], { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, "70%");
+    }
+    // let initialTimelineSetupComplete = false;
+
+    // function setupVideoAndCardsAnimations() {
+    //   if (initialTimelineSetupComplete) {
+    //     console.log("Timeline setup already complete. Skipping.");
+    //     return;
+    //   }
+
+    //   console.log(`Attempting setup. Duration: ${video.duration}, ReadyState: ${video.readyState}`);
+
+    //   if (video.duration && isFinite(video.duration) && video.duration > 0) {
+    //     console.log(`Valid video duration found: ${video.duration}. Setting up animations.`);
+
+    //     // videoTimeline.to(video, {
+    //     //   currentTime: video.duration,
+    //     //   ease: "none",
+    //     // }, 0);
+
+
+    //     initialTimelineSetupComplete = true;
+    //     ScrollTrigger.refresh();
+    //   }
+    // }
+
+    // // Hook into video lifecycle
+    // video.addEventListener("loadedmetadata", setupVideoAndCardsAnimations);
+
+    // Fallbacks
+    // if (
+    //   video.readyState >= 1 &&
+    //   video.duration &&
+    //   isFinite(video.duration) &&
+    //   video.duration > 0
+    // ) {
+    //   setupVideoAndCardsAnimations();
+    // } else if (video.readyState === 0 && video.src) {
+    //   video.load(); // Force load if needed
+    // }
+  });
+</script>
+</script>
