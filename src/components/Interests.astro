@@ -29,7 +29,7 @@
       <div class="w-1/2 flex justify-center items-start">
         <video
           id="scroll-video"
-          src="../src/assets/output.mp4"
+          src="/assets/output.mp4"
           class="w-full h-auto rounded-lg [clip-path:ellipse(90%_90%_at_90%_50%)]"
           muted
           playsinline
@@ -107,7 +107,6 @@
     });
     
     videoTimeline.fromTo(video, {scale: 0, opacity: 0 }, {scale:1, opacity: 1, duration: 0.15, ease: "power2.out" }, "00%");
-    videoTimeline.fromTo(video, { x: 500}, { x:0, duration: 0.3, ease: "power2.out" }, "00%");
 
     if (cards.length > 0) {
       videoTimeline.fromTo(cards[0], { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, "20%");

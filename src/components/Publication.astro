@@ -7,7 +7,7 @@ const uniqueId = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g,
 
 <div class="p-4 rounded-md border-theme-blue/20 border-2 flex flex-col sm:flex-row space-x-6 items-center bg-white">
   {videoUrl && (
-    <div class="fp-2 w-2/3 sm:w-1/3 flex-shrink-0">
+    <div class="p-2 w-2/3 sm:w-1/3 flex-shrink-0">
       <iframe
         class="w-full aspect-video rounded-md shadow-md"
         src={videoUrl}

@@ -3,13 +3,13 @@ import { getCollection } from "astro:content";
 import Experience from "@/components/Experience.astro";
 
 const experiences = (await getCollection("experience")).sort((a, b) =>
-  a.id.localeCompare(b.id),
+  b.id.localeCompare(a.id),
 );
 ---
 
 <section
   id="experience"
-  class="scroll-mt-16 pt-8  pb-[400px] sm:pb-[300px] px-6 max-w-3xl mx-auto overflow-clip"
+  class="scroll-mt-16 pt-8 pb-8 px-6 max-w-3xl mx-auto overflow-clip"
 >
   <h2 class="text-2xl font-bold mb-8">Experience Timeline</h2>
 
@@ -102,8 +102,8 @@ const experiences = (await getCollection("experience")).sort((a, b) =>
       ease: "none",
       scrollTrigger: {
         trigger: "#experience",
-        start: "top center-=" + ANIMATION_OFFSET,
-        end: "bottom bottom-=" + ANIMATION_OFFSET,
+        start: "top+=100 bottom-=" + ANIMATION_OFFSET/2,
+        end: "bottom bottom-=" + ANIMATION_OFFSET/2,
         scrub: 1,
         // markers: true
       },
@@ -149,9 +149,10 @@ const experiences = (await getCollection("experience")).sort((a, b) =>
           autoAlpha: 1,
           scrollTrigger: {
             trigger: node,
-            start: "top center-=" + ANIMATION_OFFSET / 1.8,
-            end: "bottom center-=" + ANIMATION_OFFSET / 0.8,
+            start: "bottom+=100 bottom-=" + ANIMATION_OFFSET/2,
+            end: "bottom+=200 bottom-=" + ANIMATION_OFFSET/2,
             scrub: 0.3,
+            // markers: true
           },
         },
       );

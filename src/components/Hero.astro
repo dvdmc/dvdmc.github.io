@@ -9,7 +9,7 @@ import Socials from "./Socials.astro";
             flex-col items-center justify-center text-center p-6"
 >
     <img
-        src="../src/assets/profile.jpg"
+        src="/assets/profile.webp"
         alt="David's profile picture"
         class="size-48 rounded-full shadow-lg shadow-primary-800 mb-4 animate-pulse-fade-in z-10"
     />
@@ -18,32 +18,33 @@ import Socials from "./Socials.astro";
         Roboticist | PhD Candidate, Universidad de Zaragoza, Spain
     </p>
 
-    <!-- Robot SVG -->
-    <div
-        id="robot"
-        class="absolute top-7/10 left-1/2 m-5 size-12 sm:size-18 z-0"
-    >
-        <Robot />
-    </div>
-
+    
     <!-- Drone 1 SVG -->
     <div
-        id="drone1"
-        class="absolute left-1/4 top-1/3 size-16 sm:size-20 m-5 z-0"
+    id="drone1"
+    class="absolute left-1/4 top-1/3 size-16 sm:size-20 m-5 z-0"
     >
-        <Drone />
-    </div>
-    <!-- Drone 2 SVG -->
+    <Drone />
+</div>
+<!-- Drone 2 SVG -->
     <div id="drone2" class="absolute right-1/4 top-1/6 size-14 sm:size-16 m-5 z-0">
         <Drone />
     </div>
-
+    
     <p class="p-2 text-gray-600 italic z-10">
         davidmc (at) unizar (dot) es
-    <p/>
-    <Socials/>
+        <p/>
+        <Socials/>
+        
+        <!-- Robot SVG -->
+        <div
+            id="robot"
+            class="relative m-5 size-12 sm:size-18 z-0"
+        >
+            <Robot />
+        </div>
 
-</section>
+    </section>
 
 <script>
     import { gsap } from "gsap";
@@ -99,13 +100,16 @@ import Socials from "./Socials.astro";
             path: lemniscatePath.slice().reverse(),
         },
     });
-    
+
+    // Get screen width
+    const screenWidth = window.innerWidth;
+
     gsap.to("#robot", {
-  x: 150,               // animate from -150 to +150
+  x: screenWidth/4,               // animate from -150 to +150
   duration: 6,
   repeat: -1,
   yoyo: true,
   ease: "sine.inOut",
-  startAt: { x: -200 }, // this centers the motion around x: 0
+  startAt: { x: -screenWidth/3 }, // this centers the motion around x: 0
 });
 </script>

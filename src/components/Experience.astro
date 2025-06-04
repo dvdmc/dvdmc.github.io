@@ -3,8 +3,8 @@ const { title, company, location, startDate, endDate, description } = Astro.prop
 ---
 <div class="animate-fade-in-left max-w-3xs sm:max-w-md">
   <h3 class="font-bold text-base sm:text-lg">{startDate} - {endDate}</h3>
-  <h4 class="font-semibold text-sm sm:text-lg break-words">{title}</h4>
-  <p class="break-words">{company}</p>
-  <p class="text-sm sm:text-base">{location}</p>
-  <p class="text-sm sm:text-base">{description}</p>
+  <h4 class="pr-4 font-semibold text-base sm:text-lg break-words">{title}</h4>
+  <p class="pr-4 font-light italic text-sm md:text-base break-words">{company}</p>
+  <p class="pr-4 text-sm sm:text-base">{location}</p>
+  <p class="pr-4 text-sm sm:text-base">{description}</p>
 </div>
