@@ -26,7 +26,17 @@ const experience = defineCollection({
   }),
 });
 
+const photos = defineCollection({
+  schema: z.object({
+    src: z.string(),
+    alt: z.string(),
+    caption: z.string(),
+    index: z.number(),
+  }),
+});
+
 export const collections = {
   publications,
   experience,
+  photos,
 };

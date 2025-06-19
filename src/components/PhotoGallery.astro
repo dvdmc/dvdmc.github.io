@@ -1,0 +1,48 @@
+---
+import { Masonry } from 'astro-masonry';
+
+export interface Props {
+  images: {
+    src: string;
+    alt: string;
+    caption?: string;
+    index: number;
+  }[];
+}
+
+const { images } = Astro.props;
+// Order by decreasing index
+images.sort((a, b) => b.index - a.index);
+---
+
+<section class="bg-gray-50 py-10 px-4 sm:px-8">
+  <h1 class="text-3xl font-bold mb-8 text-center">Some of my photos</h1>
+
+  <Masonry
+    breakpointCols={{ default: 3, 1024: 2, 640: 1 }}
+    class="flex gap-4 max-w-5xl mx-auto"
+    columnClass="flex flex-col gap-4"
+  >
+    {images.map(({ src, alt, caption }) => (
+      <div class="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer">
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          class="w-full h-auto object-cover transition-all duration-300"
+        />
+        {caption && (
+          <>
+            {/* Overlay */}
+            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition duration-300"></div>
+
+            {/* Caption */}
+            <div class="absolute bottom-0 left-0 right-0 px-3 py-2 text-sm text-white opacity-0 group-hover:opacity-100 transition duration-300 z-10">
+              {caption}
+            </div>
+          </>
+        )}
+      </div>
+    ))}
+  </Masonry>
+</section>
