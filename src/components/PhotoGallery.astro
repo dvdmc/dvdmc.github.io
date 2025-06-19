@@ -31,16 +31,16 @@ images.sort((a, b) => b.index - a.index);
           src={src}
           alt={alt}
           loading="lazy"
-          class="w-full h-auto object-cover transition-all duration-300"
+          class="w-full h-auto object-cover transition-all group-hover:scale-105 [&.toggled]:scale-105  duration-300"
         />
 
         {caption && (
           <>
             {/* Overlay */}
-            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 toggled:opacity-50 transition duration-300 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 [&.toggled]:opacity-50 transition duration-300 pointer-events-none"></div>
 
             {/* Caption */}
-            <div class="absolute bottom-0 left-0 right-0 px-3 py-2 text-sm text-white opacity-0 group-hover:opacity-100 toggled:opacity-100 transition duration-300 z-10 pointer-events-none">
+            <div class="absolute bottom-0 left-0 right-0 px-3 py-2 text-sm text-white opacity-0 group-hover:opacity-100 [&.toggled]:opacity-100 transition duration-300 z-10 pointer-events-none">
               {caption}
             </div>
           </>
