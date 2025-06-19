@@ -11,7 +11,6 @@ export interface Props {
 }
 
 const { images } = Astro.props;
-// Order by decreasing index
 images.sort((a, b) => b.index - a.index);
 ---
 
@@ -20,24 +19,28 @@ images.sort((a, b) => b.index - a.index);
 
   <Masonry
     breakpointCols={{ default: 3, 1024: 2, 640: 1 }}
-    class="flex gap-4 max-w-5xl mx-auto"
+    class="flex gap-4 max-w-6xl mx-auto"
     columnClass="flex flex-col gap-4"
   >
-    {images.map(({ src, alt, caption }) => (
-      <div class="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer">
+    {images.map(({ src, alt, caption }, i) => (
+      <div
+        class="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer photo-card"
+        data-id={`photo-${i}`}
+      >
         <img
           src={src}
           alt={alt}
           loading="lazy"
           class="w-full h-auto object-cover transition-all duration-300"
         />
+
         {caption && (
           <>
             {/* Overlay */}
-            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition duration-300"></div>
+            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 toggled:opacity-50 transition duration-300 pointer-events-none"></div>
 
             {/* Caption */}
-            <div class="absolute bottom-0 left-0 right-0 px-3 py-2 text-sm text-white opacity-0 group-hover:opacity-100 transition duration-300 z-10">
+            <div class="absolute bottom-0 left-0 right-0 px-3 py-2 text-sm text-white opacity-0 group-hover:opacity-100 toggled:opacity-100 transition duration-300 z-10 pointer-events-none">
               {caption}
             </div>
           </>
@@ -46,3 +49,16 @@ images.sort((a, b) => b.index - a.index);
     ))}
   </Masonry>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.photo-card');
+
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        card.classList.add('toggled');
+        setTimeout(() => card.classList.remove('toggled'), 2500);
+      });
+    });
+  });
+</script>
